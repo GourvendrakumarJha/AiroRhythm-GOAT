@@ -213,8 +213,7 @@ Explore the repository for implementation details:
 
 ## 📜 License
 
-No license has been specified in this README. Add a suitable open-source license to the repository if you intend to permit others to reuse, modify, or distribute the project.
-
+No license has been specified in this README.
 ---
 
 *Built with curiosity, engineering, and a vision for smarter airflow.* 🌬️
