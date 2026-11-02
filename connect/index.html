@@ -1165,6 +1165,12 @@
           <h3>Still stuck?</h3>
           <p class="lead">Open the browser console (F12) and copy any message starting with <b>[AiroRhythm]</b> — it will say exactly which address failed.</p>
         </div>
+
+        <div class="card" id="filesCard" style="margin-top:14px" hidden>
+          <h3>Deployment files</h3>
+          <p class="lead">The app, the firmware and a ready-made zip — straight from this server.</p>
+          <a class="btn ghost" href="/downloads/" target="_blank" rel="noopener" style="text-decoration:none">Open the downloads page</a>
+        </div>
       </section>
     </div>
 
@@ -1227,6 +1233,7 @@
 </noscript>
 
 <script>
+
 (function () {
   'use strict';
 
@@ -2658,6 +2665,21 @@
     }
   }
 
+  /* The local dev server can hand over the release files at /downloads/.
+     Probe it so the link only exists where it actually works. */
+  async function probeDownloads() {
+    try {
+      const res = await fetch('/downloads/', { cache: 'no-store' });
+      if (!res.ok) return;
+      const text = await res.text();
+      if (!text.includes('AiroRhythm Connect — files')) return;
+      const card = $('#filesCard');
+      if (card) card.hidden = false;
+    } catch (_) {
+      // static copy, or a production server with no release folder — nothing to link
+    }
+  }
+
   function bootNotes() {
     if (location.protocol === 'https:') {
       const note = $('#httpsNote');
@@ -2696,6 +2718,7 @@
 
   bootNotes();
   probeProxy();
+  probeDownloads();
   probeDemo().then(() => {
     const params = new URLSearchParams(location.search);
     if (params.get('demo') === '1' && state.demoAvailable) {
@@ -2709,6 +2732,7 @@
     }
   });
 })();
+
 
 </script>
 </body>
