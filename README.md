@@ -57,6 +57,9 @@ npm start
 # open http://localhost:8080 → "Open the demo"
 ```
 
+There is also a hosted copy at **<https://airorhythm.vercel.app/>** for looking around (it is
+`https://`, so it cannot reach a fan on your network — it links the Android APK instead).
+
 ### Use it with a real fan
 
 1. **Flash** `connect/firmware/airorhythm_wifi_setup.ino` (Arduino IDE → *ESP32 Dev Module*; no extra libraries for a bare board). Watch the Serial Monitor at 115200.
