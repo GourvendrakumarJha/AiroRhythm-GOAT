@@ -30,7 +30,42 @@ The prototype simulates fan behaviour and sensor readings, allowing its control 
 - **🧪 Built-in Testing:** Includes in-app self-tests and automated tests for important control, pairing, and synchronization behaviours.
 - **📐 Responsive Interface:** Designed for phone, tablet, and laptop screens.
 
-> **Important:** Sensor readings and virtual fan behaviour are simulated. Physical fan control and ESP32 integration are not yet implemented in this prototype.
+> **Important:** The Flutter prototype below simulates sensor readings and fan behaviour. For real hardware, the new **[AiroRhythm Connect](#-connecting-a-real-esp32-fan-over-wi-fi)** web app and ESP32 firmware take a real board through Wi-Fi setup and live control.
+
+## 📶 Connecting a real ESP32 fan over Wi-Fi
+
+**[`connect/`](connect/README.md)** is a second, phone-first app for the hardware side: it puts an
+ESP32 fan onto your home Wi-Fi in three taps, then controls it. No app store, no account, no
+cloud — the page talks straight to the board over your own network.
+
+```
+Join the fan's hotspot  →  pick your Wi-Fi  →  control the fan
+```
+
+| Piece | What it is |
+|---|---|
+| [`connect/index.html`](connect/index.html) | The whole app — a single file, no dependencies. Setup wizard, live controls, troubleshooting. |
+| [`connect/firmware/airorhythm_wifi_setup.ino`](connect/firmware/airorhythm_wifi_setup.ino) | ESP32 sketch: Wi-Fi provisioning portal, captive-portal page, mDNS, fan/sensor API, and a small control page. |
+| [`connect/simulator/esp32-sim.js`](connect/simulator/esp32-sim.js) | A software copy of that firmware, so the app can be demoed and tested without hardware. |
+| [`connect/server.js`](connect/server.js) | Serves the app and the simulator on one `http://` origin. |
+
+### Try the demo (no hardware)
+
+```bash
+cd connect
+npm start
+# open http://localhost:8080 → "Open the demo"
+```
+
+### Use it with a real fan
+
+1. **Flash** `connect/firmware/airorhythm_wifi_setup.ino` (Arduino IDE → *ESP32 Dev Module*; no extra libraries for a bare board). Watch the Serial Monitor at 115200.
+2. **Join** the `AiroRhythm-Setup` network on your phone. The setup page opens by itself, or go to `http://192.168.4.1`.
+3. **Pick** your 2.4 GHz Wi-Fi, type the password, and wait for the LED to go solid. The fan now answers at `http://<fan-ip>/` (its own control page) or in the full app.
+
+The app explains every failure in plain language — wrong password, 5 GHz, network out of range,
+phone still on the setup hotspot — instead of leaving you at a spinner. Full guide, API contract
+and security notes: **[`connect/README.md`](connect/README.md)**.
 
 ## 🖥️ Application Views
 
@@ -52,7 +87,7 @@ AiroRhythm is implemented as a Flutter application using Dart.
 - **Demo backend:** In-memory `DemoBackend` and `DeviceRepository`
 - **Cross-device relay:** Optional room-based synchronization using the public `ntfy.sh` relay
 - **Planned production backend:** Supabase, PostgreSQL, and Supabase Auth
-- **Planned hardware integration:** ESP32 with an HTTP-based device contract
+- **Hardware integration:** ESP32 (Arduino core) with an HTTP/JSON device contract — see [`connect/`](connect/README.md)
 
 ### Architecture at a glance
 
@@ -204,6 +239,9 @@ Developed as a prototype for **AtomQuest 2026 by Atomberg**.
 
 Explore the repository for implementation details:
 
+- [`connect/README.md`](connect/README.md) — Wi-Fi setup app, ESP32 firmware, API and tests
+- `connect/index.html` — the setup + control app
+- `connect/firmware/airorhythm_wifi_setup.ino` — ESP32 Wi-Fi provisioning firmware
 - `main.dart` — Application source
 - `docs/API-CONTRACT.md` — Service and hardware API contract
 - `docs/HARDWARE-INTEGRATION.md` — Hardware integration guidance
