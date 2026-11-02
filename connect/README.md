@@ -114,9 +114,15 @@ blocks an https page from talking to a plain-http device. Three ways that work:
 | **Local server (easiest)** | `node connect/server.js` on a laptop, then open `http://<laptop-ip>:8080` on the phone | yes (`/sim`) |
 | **From disk** | copy `connect/` to the phone and open `index.html` | no |
 | **Any static host over http** | `python3 -m http.server 8080` in `connect/` and open `http://<laptop-ip>:8080` | no |
+| **Vercel** | this repo is connected; `connect/vercel.json` sets caching, root directory is `connect` | no |
 
 On a `file://` or plain-static copy everything still works except the demo, because the demo
 needs the little simulator behind `/sim`.
+
+> **Hosted on Vercel it is `https://`.** That means it is great for walking through the flow,
+> but the browser will block it from reaching a real fan at `http://192.168.x.x` — the page
+> says so itself on the home screen. For a real setup use the APK, the local server, or the
+> board's own page.
 
 Then in the app: **Fan tab → Enter address** → `192.168.1.23` (or `airorhythm.local`) →
 **Connect**. Controls are live: power, speed 1–4, RPM, watts, temperature, humidity, smoke, and
