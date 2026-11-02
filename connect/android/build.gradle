@@ -1,0 +1,5 @@
+// Top-level build file. One module, no third-party libraries — the app is a WebView
+// that loads connect/index.html from the APK's assets.
+plugins {
+    id 'com.android.application' version '8.5.2' apply false
+}

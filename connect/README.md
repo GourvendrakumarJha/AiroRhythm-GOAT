@@ -124,6 +124,48 @@ the fan's Wi-Fi details.
 
 ---
 
+## Android app (APK)
+
+The same app ships as an installable APK: a ~60 KB WebView wrapper that loads
+`index.html` **from inside the APK**, so it works with no server, no browser and no
+internet — just the phone and the fan.
+
+- Source: [`android/`](android/) — one `MainActivity`, no libraries, no AndroidX.
+- The build copies `index.html` + `assets/logo_mark.png` into the APK (`syncWebApp`), so the
+  APK can never drift from the web app.
+- Cleartext HTTP is allowed and the WebView is told to accept it, which a browser page on
+  `https://` would refuse — that is the whole reason to have an APK.
+- Extra, only inside the app: **Open Wi-Fi settings** in step 1 jumps straight to the
+  system Wi-Fi panel. The page reveals it only when the bridge exists, so the browser
+  build is unchanged.
+
+### Get the APK
+
+1. GitHub → **Actions** → **Android APK** → **Run workflow** (or just push a change to
+   `connect/index.html`).
+2. When the run finishes, download the **`airorhythm-connect-apk`** artifact and unzip it —
+   that is `app-debug.apk`.
+3. On the phone: open the file, allow "install unknown apps" for your browser/file manager,
+   install, open **AiroRhythm Connect**.
+
+The debug APK is signed with the standard debug key, which is fine for sideloading. Replace
+the `signingConfig` in `app/build.gradle` before publishing anywhere.
+
+### Build it yourself
+
+```bash
+# Android Studio: open connect/android and press Run
+# or, with a local JDK 17 + Android SDK:
+cd connect/android && gradle assembleDebug
+# → app/build/outputs/apk/debug/app-debug.apk
+```
+
+The in-app **demo** needs the little simulator behind `/sim`, which only the Node server
+provides, so the demo card stays hidden in the APK. Everything else — setup, scan, joining,
+controls, Change Wi-Fi, Help — is the same code.
+
+---
+
 ## Shipping it (production files)
 
 ```bash

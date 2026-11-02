@@ -1,0 +1,63 @@
+plugins {
+    id 'com.android.application'
+}
+
+// The web app is the source of truth: it lives in connect/ one level up and is copied
+// into the APK's assets on every build, so the APK can never ship an old copy.
+def webRoot = rootProject.file('..')
+
+android {
+    namespace 'com.airorhythm.connect'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'com.airorhythm.connect'
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName '1.0.0'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    buildTypes {
+        debug {
+            // installed straight from CI, no signing setup needed
+        }
+        release {
+            minifyEnabled false
+            // Signed with the debug key so a sideloaded build still installs.
+            // Replace this block with your own keystore before publishing anywhere.
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    packagingOptions {
+        resources.excludes += ['META-INF/*', 'kotlin/**']
+    }
+
+    lint {
+        abortOnError false
+    }
+}
+
+tasks.register('syncWebApp') {
+    description = 'Copies connect/index.html and its assets into the APK assets.'
+    doLast {
+        copy {
+            from(new File(webRoot, 'index.html'))
+            into(layout.projectDirectory.dir('src/main/assets'))
+        }
+        copy {
+            from(new File(webRoot, 'assets/logo_mark.png'))
+            into(layout.projectDirectory.dir('src/main/assets/assets'))
+        }
+    }
+}
+
+afterEvaluate {
+    tasks.named('preBuild').configure { dependsOn 'syncWebApp' }
+}
