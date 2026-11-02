@@ -1176,6 +1176,15 @@
           <p class="lead">The app, the firmware and a ready-made zip — straight from this server.</p>
           <a class="btn ghost" href="/downloads/" target="_blank" rel="noopener" style="text-decoration:none">Open the downloads page</a>
         </div>
+        <div class="card" id="ghCard" style="margin-top:14px" hidden>
+          <h3>Get the Android app</h3>
+          <p class="lead">This copy is hosted over https, so the browser will not let it reach a fan on your Wi-Fi. The Android app talks to the fan directly — install it and setup works on the same phone.</p>
+          <a class="btn primary" href="https://github.com/GourvendrakumarJha/AiroRhythm-GOAT/raw/main/release/airorhythm-connect-1.0.0.apk" rel="noopener" style="text-decoration:none">Download the APK</a>
+          <p class="hint">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+            <span>Android asks you to allow installs from this browser. Prefer the zip, the firmware or the source? <a href="https://github.com/GourvendrakumarJha/AiroRhythm-GOAT/tree/main/release" target="_blank" rel="noopener">Browse the release files on GitHub</a>.</span>
+          </p>
+        </div>
       </section>
     </div>
 
@@ -2699,19 +2708,25 @@
     });
   }
 
-  function bootNotes() {
+  function httpsNote() {
+    const note = $('#httpsNote');
+    if (!note) return;
     if (location.protocol === 'https:') {
-      const note = $('#httpsNote');
       note.hidden = false;
-      note.textContent =
-        'You are viewing this page over https. Browsers block https pages from reaching a fan at http://192.168.x.x — the demo below works here; use the http:// copy at home for a real fan.';
+      note.textContent = state.demoAvailable
+        ? 'You are viewing this page over https. Browsers block https pages from reaching a fan at http://192.168.x.x — look around with the demo below, and use the Android app or the http:// copy at home to set a real fan up.'
+        : 'You are viewing this page over https. Browsers block https pages from reaching a fan at http://192.168.x.x, so this hosted copy is a preview only — set a real fan up with the Android app (Help › Get the Android app) or the http:// copy at home.';
+      return;
     }
     if (location.protocol === 'file:') {
-      const note = $('#httpsNote');
       note.hidden = false;
       note.textContent =
         'Opened from a file. A real fan will work if your browser allows it; if not, run “node connect/server.js” and open the http:// address instead.';
     }
+  }
+
+  function bootNotes() {
+    httpsNote();
     renderSaved();
   }
 
@@ -2750,6 +2765,11 @@
     if (params.get('ip')) {
       $('#homeIp').value = params.get('ip');
     }
+    /* A hosted https copy can never reach a fan, and offers no demo unless a
+       simulator is running behind it — so point the visitor at the app. */
+    const hosted = location.protocol === 'https:' && !state.demoAvailable && !state.proxyAvailable;
+    if (hosted && $('#ghCard')) $('#ghCard').hidden = false;
+    httpsNote();
   });
 })();
 
