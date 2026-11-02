@@ -1,3 +1,4 @@
-# build output — the packaged zip is tracked so a fresh clone has it
+# build output — packaged artifacts are tracked so a fresh clone has them
 release/*
 !release/*.zip
+!release/*.apk

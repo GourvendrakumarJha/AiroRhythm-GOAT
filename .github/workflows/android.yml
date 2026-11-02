@@ -23,7 +23,7 @@ on:
       - '.github/workflows/android.yml'
 
 permissions:
-  contents: read
+  contents: write   # only so a manual run can check the APK into release/
 
 jobs:
   apk:
@@ -62,6 +62,25 @@ jobs:
           ls -l "$APK"
           unzip -l "$APK" | grep -E "index.html|logo_mark.png|classes.dex|AndroidManifest" || true
           echo "sha256: $(sha256sum "$APK" | cut -d' ' -f1)"
+
+      - name: Check the APK into the branch (manual runs only)
+        # The artifact above is the normal way to grab a build. A workflow_dispatch run
+        # also drops the APK next to the web release, so it can be installed straight
+        # from the repository (GitHub's file view, or the app's /downloads page).
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          mkdir -p release
+          cp connect/android/app/build/outputs/apk/debug/app-debug.apk \
+             release/airorhythm-connect-1.0.0.apk
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f release/airorhythm-connect-1.0.0.apk
+          if git diff --cached --quiet; then
+            echo "APK unchanged since the last commit"
+            exit 0
+          fi
+          git commit -m "android: rebuild the apk from $(git rev-parse --short HEAD) [skip ci]"
+          git push
 
       - name: Upload the APK
         uses: actions/upload-artifact@v4
