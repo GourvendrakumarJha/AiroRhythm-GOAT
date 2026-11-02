@@ -63,11 +63,13 @@ jobs:
           unzip -l "$APK" | grep -E "index.html|logo_mark.png|classes.dex|AndroidManifest" || true
           echo "sha256: $(sha256sum "$APK" | cut -d' ' -f1)"
 
-      - name: Check the APK into the branch (manual runs only)
-        # The artifact above is the normal way to grab a build. A workflow_dispatch run
-        # also drops the APK next to the web release, so it can be installed straight
-        # from the repository (GitHub's file view, or the app's /downloads page).
-        if: github.event_name == 'workflow_dispatch'
+      - name: Check the APK into the branch
+        # The artifact above is the normal way to grab a build. When the commit message
+        # asks for it (or a manual run happens), the APK is also committed next to the
+        # web release, so it can be installed straight from the repository.
+        if: >-
+          github.event_name == 'workflow_dispatch' ||
+          contains(github.event.head_commit.message, '[apk]')
         run: |
           mkdir -p release
           cp connect/android/app/build/outputs/apk/debug/app-debug.apk \
