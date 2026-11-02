@@ -124,6 +124,40 @@ the fan's Wi-Fi details.
 
 ---
 
+## Shipping it (production files)
+
+```bash
+npm run release          # → ../release/airorhythm-connect-1.0.0/ + .zip
+```
+
+That assembles exactly what you deploy, straight from this folder, so nothing has to be
+hand-picked later:
+
+| File in the package | Why |
+|---|---|
+| `index.html` | the whole app (one file, no build step, no dependencies) |
+| `assets/logo_mark.png` | favicon + logo the page references |
+| `firmware/airorhythm_wifi_setup.ino` | flash this to the board |
+| `server.js` | lean production server: static + `/board/*` proxy, no simulator assumptions |
+| `README.md` | deployment, wiring, HTTP contract, troubleshooting |
+| `simulator/` | **optional** demo backend — delete it and the demo card disappears |
+| `SHA256SUMS.txt`, `package.json` | integrity + `npm start` |
+
+The packaged `server.js` differs from the dev one on purpose: it has no dependency on the
+simulator (mounted only if the folder is present), refuses dotted paths and path traversal,
+caches assets but never the HTML, answers `GET /health` with `{ok, board, demo, version}`,
+and exits with a readable message if the port is taken.
+
+Verify a package:
+
+```bash
+cd release/airorhythm-connect-1.0.0 && node server.js     # http://localhost:8080
+curl -s localhost:8080/health
+BOARD_HOST=192.168.1.23 node server.js                    # + /board/* proxy
+```
+
+---
+
 ## What's in the app
 
 | Screen | What it does |
