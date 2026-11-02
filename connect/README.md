@@ -129,11 +129,14 @@ the fan's Wi-Fi details.
 | Screen | What it does |
 |---|---|
 | **Home** | Start setup, reopen a saved fan, or open the demo. Warns when the page is https. |
-| **Step 1 — Join** | Shows the hotspot name with a copy button, then keeps checking `192.168.4.1` until the fan answers. Explains “No internet” prompts before you hit them. |
-| **Step 2 — Network** | Scans from the board, shows signal strength and lock state, flags names that look 5 GHz, validates password length, allows typing a hidden network name. |
-| **Step 3 — Connect** | Three-stage progress with the elapsed time, then either a success card with the fan's address, or a specific, friendly failure with what to check. |
-| **Fan** | Live telemetry, power and speed control, network details, **Change Wi-Fi** (keeps the old network if the new one fails) and **Start over**. |
+| **Step 1 — Join** | The hotspot name with a copy button and a one-line checklist (“No internet” is explained before you hit it). A live detection strip shows *searching → found → still nothing*, and only reveals the troubleshooting link when it actually needs to. **Continue** turns on the moment the board answers. |
+| **Step 2 — Network** | The board scans, and you get three big rows with signal strength and lock state (scroll for more, or **Type the name instead** for a hidden network). Names that look 5 GHz are flagged before you commit, the password is length-checked, and the **Connect my fan** button sticks to the bottom so it is never off-screen. |
+| **Step 3 — Connect** | A ring draws the join, then three stages tick over with elapsed time. On success: the address, a copy button, and **Open fan controls**. On failure: a plain-language reason (“That's a 5 GHz network”), the retry buttons first, then three things to check. |
+| **Fan** | Live telemetry (power, temperature, humidity, air quality), power and speed 0–4, network details, **Change Wi-Fi** in a sheet that keeps the old network until the new one works, and **Start over**. |
 | **Help** | Nine answers: hotspot missing, “no internet”, wrong password, 5 GHz, can't reach the fan, https/mixed content, LED meanings, factory reset, safety. |
+
+The layout is checked in a real browser from **320 px to 1440 px** — nothing overflows sideways, and
+every primary button stays on screen without scrolling (the step-2 button is sticky, the rest fit).
 
 Details that make it feel less like a config page: it remembers the last fan, copies addresses
 for you, never says “success” before the board confirms, disables buttons while a command is in
@@ -156,6 +159,11 @@ different origin. `OPTIONS` preflights are answered too.
 | POST | `/wifi` | `{"ssid":…,"password":…}` → `{"ok":true,"ip":"192.168.1.23"}` or `{"ok":false,"reason":"bad-password"｜"not-found"｜"5ghz"｜"timeout"}` |
 | POST | `/reset` | wipes the saved network and reboots |
 | GET | `/` | the board's own setup page |
+
+> **Both spellings work.** The app calls `/ap/status`, `/ap/scan`, `/ap/wifi`, `/ap/reset` while it is
+> on the fan's hotspot and `/lan/status`, `/lan/state`, `/lan/cmd`, `/lan/wifi`, `/lan/forget`,
+> `/lan/scan` once the fan is on your home network. The sketch registers those prefixes next to the
+> bare paths in the tables, so curl, the built-in pages and the app all agree.
 
 **Home network** (the fan's IP)
 

@@ -919,6 +919,25 @@ void setupRoutes() {
   server.on("/cmd", HTTP_OPTIONS, handleOptions);
   server.on("/api/cmd", HTTP_POST, handleCmd);
 
+  // The web app speaks two prefixes: /ap/* while your phone sits on the fan's hotspot and
+  // /lan/* once the fan is on your home network. Same handlers, so both spellings work and
+  // the bare paths above keep the built-in pages (and curl) happy.
+  server.on("/ap/status", HTTP_GET, handleStatus);
+  server.on("/ap/scan", HTTP_GET, handleScan);
+  server.on("/ap/wifi", HTTP_POST, handleWifi);
+  server.on("/ap/wifi", HTTP_OPTIONS, handleOptions);
+  server.on("/ap/reset", HTTP_POST, handleReset);
+  server.on("/ap/reset", HTTP_OPTIONS, handleOptions);
+  server.on("/lan/status", HTTP_GET, handleStatus);
+  server.on("/lan/scan", HTTP_GET, handleScan);
+  server.on("/lan/state", HTTP_GET, handleState);
+  server.on("/lan/cmd", HTTP_POST, handleCmd);
+  server.on("/lan/cmd", HTTP_OPTIONS, handleOptions);
+  server.on("/lan/wifi", HTTP_POST, handleWifi);
+  server.on("/lan/wifi", HTTP_OPTIONS, handleOptions);
+  server.on("/lan/forget", HTTP_POST, handleForget);
+  server.on("/lan/forget", HTTP_OPTIONS, handleOptions);
+
   // Any other GET while in setup mode: show the page (captive portal friendly).
   server.onNotFound([]() {
     if (server.method() == HTTP_OPTIONS) {

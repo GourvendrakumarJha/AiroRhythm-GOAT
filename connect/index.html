@@ -33,6 +33,7 @@
     --ease:cubic-bezier(.22,.9,.32,1);
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  [hidden]{display:none !important}
   html,body{height:100%}
   body{
     font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
@@ -87,13 +88,15 @@
   /* ============ app frame ============ */
   .app{
     position:relative;width:100%;background:var(--bg);border-radius:34px;
+    height:min(900px,calc(100vh - 48px));
     height:min(900px,calc(100dvh - 48px));min-height:560px;
-    display:flex;flex-direction:column;overflow:hidden;
+    display:flex;flex-direction:column;overflow:hidden;overflow:clip;
     box-shadow:var(--shadow-lg),0 0 0 1px rgba(255,255,255,.75);isolation:isolate;
   }
   @media (max-width:999px){
     body{padding:0;display:block;background-image:radial-gradient(700px 420px at 10% -10%,rgba(47,128,237,.12),transparent 60%)}
-    .app{height:100dvh;max-height:none;border-radius:0;box-shadow:none}
+    .shell{display:block;max-width:none;gap:0}
+    .app{height:100vh;height:100dvh;max-height:none;border-radius:0;box-shadow:none;min-height:0}
   }
 
   /* ============ top bar ============ */
@@ -130,33 +133,33 @@
   .iconbtn:active{transform:scale(.95)}
 
   /* ============ views ============ */
-  .views{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:2px 16px 26px;scroll-behavior:smooth}
+  .views{flex:1;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;padding:2px 16px 26px}
   .views::-webkit-scrollbar{width:0}
   .view{display:none}
   .view.active{display:block;animation:viewin .28s var(--ease)}
   @keyframes viewin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
   /* ============ home ============ */
-  .hero{padding:16px 4px 20px}
+  .hero{padding:10px 4px 14px}
   .eyebrow{
     display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;
     letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:12px;
   }
   .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 4px rgba(47,128,237,.13)}
-  .hero h1{font-size:38px;line-height:1.02;letter-spacing:-.04em;font-weight:850;margin-bottom:13px}
+  .hero h1{font-size:37px;line-height:1.03;letter-spacing:-.04em;font-weight:850;margin-bottom:11px}
   .hero h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .hero p{font-size:15.5px;color:var(--ink2);line-height:1.5;max-width:36ch}
-  .hero-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:22px 0 6px}
+  .hero-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:16px 0 2px}
   .hs{
-    background:#fff;border:1px solid var(--line);border-radius:15px;padding:10px 10px 11px;
-    display:flex;flex-direction:column;gap:5px;
+    background:#fff;border:1px solid var(--line);border-radius:14px;padding:9px 10px 10px;
+    display:flex;flex-direction:column;gap:4px;
   }
   .hs i{
     font-style:normal;width:20px;height:20px;border-radius:7px;background:var(--blue-soft);color:var(--blue);
     font-size:11px;font-weight:800;display:grid;place-items:center;
   }
-  .hs b{font-size:12.5px;font-weight:750;letter-spacing:-.01em;line-height:1.25}
-  .hs span{font-size:11px;color:var(--ink3);line-height:1.3}
+  .hs b{font-size:12px;font-weight:750;letter-spacing:-.01em;line-height:1.25}
+  .hs span{font-size:10.5px;color:var(--ink3);line-height:1.3;white-space:nowrap}
 
   /* ============ buttons ============ */
   .btn{
@@ -167,6 +170,7 @@
   }
   .btn:active{transform:scale(.985)}
   .btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+  .btn.primary:disabled{background:#E9E4D8;color:#9BA6B1;opacity:1;border-color:transparent;box-shadow:none}
   .btn.primary{
     background:var(--grad);color:#fff;border-color:transparent;
     box-shadow:0 12px 26px rgba(64,101,240,.30);
@@ -181,7 +185,7 @@
   .btn-row{display:grid;gap:10px;grid-template-columns:1fr 1fr}
 
   /* ============ cards ============ */
-  .card{background:var(--card);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);border:1px solid rgba(231,226,214,.7);margin-bottom:13px}
+  .card{background:var(--card);border-radius:var(--r);padding:15px;box-shadow:var(--shadow);border:1px solid rgba(231,226,214,.7);margin-bottom:13px}
   .card h2{font-size:17px;font-weight:800;letter-spacing:-.02em;margin-bottom:5px}
   .card p.lead{font-size:13.5px;color:var(--ink2);line-height:1.5}
   .card h3{font-size:14.5px;font-weight:800;letter-spacing:-.01em;margin-bottom:4px}
@@ -222,12 +226,19 @@
   /* demo card */
   .demo-card{
     background:linear-gradient(135deg,#F3EFFE,#EDF3FE);border:1px solid #E5DEFB;
-    border-radius:20px;padding:15px;display:flex;gap:13px;align-items:flex-start;margin-top:2px;
+    border-radius:16px;padding:11px 12px;display:flex;gap:11px;align-items:center;margin-top:2px;
   }
-  .demo-card .ico{width:38px;height:38px;border-radius:12px;background:#fff;display:grid;place-items:center;color:var(--violet);flex:0 0 auto;box-shadow:0 4px 12px rgba(124,77,255,.12)}
-  .demo-card h3{font-size:14.5px;font-weight:800;margin-bottom:3px}
-  .demo-card p{font-size:12.5px;color:var(--ink2);line-height:1.45;margin-bottom:9px}
-  .demo-card .btn{width:auto}
+  .demo-card .ico{width:34px;height:34px;border-radius:11px;background:#fff;display:grid;place-items:center;color:var(--violet);flex:0 0 auto;box-shadow:0 4px 12px rgba(124,77,255,.12)}
+  .demo-card .dtxt{min-width:0;flex:1}
+  .demo-card h3{font-size:13.5px;font-weight:800;margin-bottom:2px}
+  .demo-card p{font-size:12px;color:var(--ink2);line-height:1.4}
+  .demo-card .btn{width:auto;flex:0 0 auto;padding:9px 14px;font-size:12.5px}
+
+  .linkbtn{
+    display:block;margin:8px auto 0;background:none;border:0;cursor:pointer;font-family:inherit;
+    font-size:12.5px;font-weight:750;color:var(--ink3);padding:9px 12px;border-radius:10px;
+  }
+  .linkbtn:hover{color:var(--blue)}
 
   /* inline note */
   .note{
@@ -241,7 +252,11 @@
   .note b{font-weight:800}
 
   /* ============ wizard ============ */
-  .wizbar{display:flex;align-items:center;gap:12px;padding:2px 2px 16px;position:sticky;top:0;z-index:6;background:linear-gradient(180deg,var(--bg) 62%,rgba(247,244,237,0))}
+  .wizbar{
+    display:flex;align-items:center;gap:12px;padding:2px 2px 12px;position:sticky;top:0;z-index:6;
+    background:var(--bg);
+  }
+
   .wizbar .back{
     width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:#fff;
     display:grid;place-items:center;cursor:pointer;color:var(--ink2);flex:0 0 auto;box-shadow:0 2px 8px rgba(20,28,40,.05)
@@ -255,9 +270,9 @@
 
   .step{display:none}
   .step.active{display:block;animation:viewin .26s var(--ease)}
-  .step .kicker{font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
-  .step h2{font-size:27px;line-height:1.12;letter-spacing:-.032em;font-weight:850;margin-bottom:9px}
-  .step .sub{font-size:14.5px;color:var(--ink2);line-height:1.52;margin-bottom:18px;max-width:40ch}
+  .step .kicker{font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+  .step h2{font-size:24px;line-height:1.16;letter-spacing:-.03em;font-weight:850;margin-bottom:7px}
+  .step .sub{font-size:13.8px;color:var(--ink2);line-height:1.5;margin-bottom:14px;max-width:42ch}
 
   /* AP network card */
   .apcard{
@@ -272,56 +287,62 @@
   .apcard .wifi-ico{width:40px;height:40px;border-radius:13px;background:rgba(255,255,255,.18);display:grid;place-items:center;flex:0 0 auto;position:relative;z-index:1}
   .apcard .txt{flex:1;min-width:0;position:relative;z-index:1}
   .apcard .cap{display:block;font-size:10.5px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;opacity:.78}
-  .apcard b{display:block;font-size:19px;font-weight:800;letter-spacing:-.02em;margin-top:2px;word-break:break-word}
-  .apcard .sub2{display:block;font-size:12px;opacity:.82;font-weight:600;margin-top:2px}
+  .apcard b{display:block;font-size:18px;font-weight:800;letter-spacing:-.025em;margin-top:2px;word-break:break-word}
+  .apcard .sub2{display:block;font-size:11.5px;opacity:.85;font-weight:600;margin-top:2px}
   .apcard .copy{
     position:relative;z-index:1;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);
     color:#fff;border-radius:11px;padding:9px 12px;font-size:12px;font-weight:800;cursor:pointer;flex:0 0 auto;
   }
   .apcard .copy:active{transform:scale(.96)}
 
-  .howto{background:#fff;border-radius:18px;border:1px solid var(--line);padding:6px 4px;margin-bottom:14px;box-shadow:var(--shadow)}
-  .howto li{display:flex;gap:11px;padding:11px 12px;list-style:none;border-bottom:1px solid var(--line-soft);font-size:13.5px;line-height:1.45;align-items:flex-start;color:var(--ink2)}
+  .howto{background:#fff;border-radius:16px;border:1px solid var(--line);padding:3px 2px;margin-bottom:12px;box-shadow:0 2px 10px rgba(20,28,40,.04)}
+  .howto li{display:flex;gap:10px;padding:9px 12px;list-style:none;border-bottom:1px solid var(--line-soft);font-size:13px;line-height:1.4;align-items:center;color:var(--ink2)}
   .howto li:last-child{border-bottom:0}
   .howto .n{
-    width:21px;height:21px;border-radius:50%;background:var(--blue-soft);color:var(--blue);
-    font-size:11px;font-weight:800;display:grid;place-items:center;flex:0 0 auto;margin-top:1px
+    width:19px;height:19px;border-radius:50%;background:var(--blue-soft);color:var(--blue);
+    font-size:10.5px;font-weight:800;display:grid;place-items:center;flex:0 0 auto
   }
   .howto b{color:var(--ink);font-weight:750}
 
   /* detection */
   .detect{
-    border-radius:20px;padding:18px 16px;text-align:center;background:#fff;border:1.5px solid var(--line);
-    box-shadow:var(--shadow);margin-bottom:14px;transition:.25s;
+    display:flex;align-items:center;gap:12px;padding:12px 13px;border-radius:16px;background:#fff;
+    border:1.5px solid var(--line);box-shadow:0 2px 10px rgba(20,28,40,.04);margin-bottom:12px;transition:.25s;
   }
-  .detect[data-state="found"]{border-color:#BFE9D7;background:linear-gradient(180deg,#F7FDFA,#fff)}
-  .detect[data-state="fail"]{border-color:#F3E0BE;background:linear-gradient(180deg,#FFFBF3,#fff)}
-  .radar{position:relative;width:76px;height:76px;margin:0 auto 10px;display:grid;place-items:center}
-  .radar i{
-    position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(47,128,237,.32);
-    animation:pulse 2.6s var(--ease) infinite;opacity:0;
+  .detect[data-state="found"]{border-color:#BFE9D7;background:linear-gradient(180deg,#F6FDFA,#fff)}
+  .detect[data-state="fail"]{border-color:#F0DFC0;background:linear-gradient(180deg,#FFFCF4,#fff)}
+  .detect .dicon{
+    position:relative;width:38px;height:38px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;
+    background:var(--blue-soft);color:var(--blue);transition:.25s;
   }
-  .radar i:nth-child(2){animation-delay:.85s}
-  .radar i:nth-child(3){animation-delay:1.7s}
-  @keyframes pulse{
-    0%{transform:scale(.42);opacity:0}
-    25%{opacity:.95}
-    100%{transform:scale(1.02);opacity:0}
+  .detect[data-state="searching"] .dicon::after{
+    content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(47,128,237,.45);
+    animation:scanpulse 1.8s var(--ease) infinite;
   }
-  .radar .core{
-    width:38px;height:38px;border-radius:50%;background:var(--blue-soft);color:var(--blue);
-    display:grid;place-items:center;z-index:1;transition:.3s;
+  @keyframes scanpulse{0%{transform:scale(.75);opacity:.9}100%{transform:scale(1.32);opacity:0}}
+  .detect[data-state="found"] .dicon{background:var(--green);color:#fff}
+  .detect[data-state="fail"] .dicon{background:var(--amber-soft);color:var(--amber)}
+  .detect[data-state="idle"] .dicon{background:#F0EDE5;color:var(--ink3)}
+  .detect .dtxt{flex:1;min-width:0}
+  .detect b{display:block;font-size:14px;font-weight:800;letter-spacing:-.01em}
+  .detect p{font-size:12.3px;color:var(--ink2);line-height:1.42;margin-top:2px}
+  .detect .meta{
+    display:inline-flex;gap:6px;align-items:center;font-size:10.5px;font-weight:750;color:var(--green);
+    background:var(--green-soft);border-radius:6px;padding:2px 7px;margin-top:5px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
   }
-  .detect[data-state="found"] .radar i{animation:none;opacity:0}
-  .detect[data-state="found"] .radar .core{background:var(--green);color:#fff;box-shadow:0 0 0 6px rgba(18,166,110,.12)}
-  .detect[data-state="fail"] .radar i{animation:none;opacity:0}
-  .detect[data-state="fail"] .radar .core{background:var(--amber-soft);color:var(--amber)}
-  .detect[data-state="idle"] .radar i,
-  .detect[data-state="searching"] .radar i{opacity:1}
-  .detect b{display:block;font-size:15px;font-weight:800;letter-spacing:-.01em}
-  .detect p{font-size:12.8px;color:var(--ink2);line-height:1.5;margin-top:3px;max-width:34ch;margin-inline:auto}
-  .detect .acts{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
-  .detect .meta{display:inline-flex;gap:8px;align-items:center;font-size:11.5px;font-weight:700;color:var(--ink3);background:#F6F3EC;border-radius:8px;padding:3px 8px;margin-top:8px;font-family:ui-monospace,Menlo,monospace}
+  .detect .mini{
+    flex:0 0 auto;border:0;background:var(--blue-soft);color:var(--blue);border-radius:10px;
+    font-family:inherit;font-size:12px;font-weight:800;padding:9px 11px;cursor:pointer;
+  }
+  .detect .mini:active{transform:scale(.96)}
+  .apcard .copy{white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+  @media (max-width:380px){
+    .apcard .copy span{display:none}
+    .apcard .copy{width:34px;height:34px;justify-content:center;padding:0}
+  }
+  .detect .mini.demo{background:var(--violet-soft);color:var(--violet)}
+  .detect[data-state="found"] .mini{display:none}
 
   /* network list */
   .list-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
@@ -329,17 +350,32 @@
   .refresh{display:inline-flex;align-items:center;gap:5px;background:none;border:0;cursor:pointer;font-size:12.5px;font-weight:750;color:var(--blue);padding:4px}
   .refresh.spin svg{animation:spin .9s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
-  .nets{display:grid;gap:8px;margin-bottom:6px}
+  #step2.manual .nets, #step2.manual .list-head, #step2.manual #netFoot{display:none}
+  .nets{
+    display:grid;gap:8px;grid-auto-rows:66px;margin-bottom:4px;
+    max-height:calc(66px * 3 + 16px);overflow-y:auto;overscroll-behavior:contain;padding-right:2px;
+  }
+  .nets::-webkit-scrollbar{width:0}
+  /* keeps the primary action reachable while the network list is scrolled */
+  .stepcta{
+    position:sticky;bottom:-1px;z-index:4;padding:12px 0 2px;margin-top:2px;
+    background:linear-gradient(180deg,rgba(247,244,237,0) 0%,var(--bg) 40%);
+  }
+  .listfoot{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    font-size:11.5px;color:var(--ink3);margin:1px 0 2px;min-height:26px;
+  }
+  .listfoot span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .net{
-    display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;
-    border:1.5px solid var(--line);border-radius:16px;padding:13px 14px;cursor:pointer;
+    display:flex;align-items:center;gap:12px;width:100%;height:66px;text-align:left;background:#fff;
+    border:1.5px solid var(--line);border-radius:16px;padding:0 14px;cursor:pointer;
     transition:.15s;box-shadow:0 2px 10px rgba(20,28,40,.04);
   }
   .net:hover{border-color:#CFE0FA}
   .net .sig{flex:0 0 auto;color:var(--ink3);display:grid;place-items:center;width:20px}
   .net .body{flex:1;min-width:0}
   .net b{display:block;font-size:14.5px;font-weight:750;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .net span{display:block;font-size:11.5px;color:var(--ink3);font-weight:650;margin-top:1px;display:flex;align-items:center;gap:5px}
+  .net .body > span{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--ink3);font-weight:650;margin-top:2px}
   .net .lock{display:inline-flex;color:var(--ink3)}
   .net .tick{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);flex:0 0 auto;display:grid;place-items:center;color:#fff;transition:.15s}
   .net.sel{border-color:var(--blue);background:linear-gradient(180deg,#F4F8FF,#fff);box-shadow:0 0 0 4px rgba(47,128,237,.09)}
@@ -349,9 +385,33 @@
   @keyframes shimmer{to{background-position:-200% 0}}
   .empty-list{background:#fff;border:1px dashed #DDD6C7;border-radius:16px;padding:16px;font-size:13px;color:var(--ink2);line-height:1.5;text-align:center}
 
-  .manual-toggle{background:none;border:0;color:var(--blue);font-size:13px;font-weight:750;cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:5px}
+  .manual-toggle{
+    background:none;border:0;color:var(--blue);font-size:12px;font-weight:750;cursor:pointer;
+    padding:4px 2px;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex:0 0 auto;
+  }
 
   /* progress */
+  .card.tips{padding:14px 15px;box-shadow:0 2px 10px rgba(20,28,40,.04)}
+  .tiplist{list-style:none;display:grid;gap:8px;margin-top:9px}
+  .tiplist li{display:flex;gap:8px;font-size:12.3px;color:var(--ink2);line-height:1.45}
+  .tiplist li .ti{flex:0 0 auto;width:24px;height:24px;border-radius:8px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;margin-top:-2px}
+  .joinviz{display:flex;align-items:center;justify-content:center;padding:8px 0 18px;position:relative}
+  .joinviz .ring{position:absolute;width:118px;height:118px;border-radius:50%;border:1.5px solid rgba(47,128,237,.22)}
+  .joinviz .ring:nth-child(2){width:88px;height:88px;border-color:rgba(47,128,237,.3)}
+  .joinviz .disc{
+    width:64px;height:64px;border-radius:50%;background:#fff;color:var(--blue);display:grid;place-items:center;
+    box-shadow:0 10px 26px rgba(47,128,237,.18);position:relative;z-index:1;
+  }
+  .joinviz.done{display:none}
+  .joinviz.failed{display:none}
+  .joinviz.done .disc{background:var(--green);color:#fff;box-shadow:0 10px 26px rgba(18,166,110,.22)}
+  .joinviz.done .ring{border-color:rgba(18,166,110,.22)}
+  .joinviz.failed .disc{background:var(--amber-soft);color:var(--amber);box-shadow:0 10px 26px rgba(221,143,34,.18)}
+  .joinviz.failed .ring{border-color:rgba(221,143,34,.2)}
+  .joinviz.searching .ring{animation:scanpulse 2.2s var(--ease) infinite}
+  .joinviz.searching .ring:nth-child(2){animation-delay:.6s}
+
+  .plist.done{display:none}
   .plist{list-style:none;display:grid;gap:2px;background:#fff;border-radius:20px;border:1px solid var(--line);padding:6px 4px;box-shadow:var(--shadow);margin-bottom:14px}
   .plist li{display:flex;align-items:center;gap:12px;padding:13px 12px;font-size:14px;font-weight:650;color:var(--ink3);border-bottom:1px solid var(--line-soft);transition:.2s}
   .plist li:last-child{border-bottom:0}
@@ -379,13 +439,15 @@
   .ipcard span{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
   .ipcard b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:16px;font-weight:700;letter-spacing:-.01em}
   .ipcard button{background:none;border:0;color:var(--blue);cursor:pointer;padding:2px;display:grid;place-items:center}
-  .failcard{text-align:center;padding:20px 16px;border-radius:22px;background:linear-gradient(180deg,#FFFCF6,#fff);border:1px solid #F1E2C9;margin-bottom:14px}
+  .failcard{text-align:center;padding:18px 15px;border-radius:22px;background:linear-gradient(180deg,#FFFCF6,#fff);border:1px solid #F1E2C9;margin-bottom:12px}
   .failcard .icon{width:54px;height:54px;border-radius:50%;background:var(--amber-soft);color:var(--amber);display:grid;place-items:center;margin:0 auto 12px}
   .failcard h3{font-size:18.5px;font-weight:850;letter-spacing:-.02em;margin-bottom:5px}
   .failcard p{font-size:13.5px;color:var(--ink2);line-height:1.5;max-width:36ch;margin:0 auto}
-  .failcard ul{list-style:none;text-align:left;margin:14px 0 2px;display:grid;gap:8px}
-  .failcard li{display:flex;gap:8px;font-size:12.8px;color:var(--ink2);line-height:1.45;background:#fff;border:1px solid var(--line-soft);border-radius:11px;padding:9px 11px}
-  .failcard li::before{content:'•';color:var(--amber);font-weight:900}
+  .failcard ul{list-style:none;text-align:left;margin:12px 0 0;display:grid;gap:6px}
+  .tiplist.checks li{font-size:12.4px}
+  .tiplist.checks li::before{
+    content:'';flex:0 0 auto;width:5px;height:5px;border-radius:50%;background:var(--amber);margin-top:7px;
+  }
 
   /* ============ fan view ============ */
   .fanhead{display:flex;align-items:flex-start;gap:12px;padding:12px 2px 16px}
@@ -394,7 +456,7 @@
   .fanhead .pill{margin-top:4px}
 
   .fan-hero{
-    border-radius:26px;padding:20px 16px 18px;text-align:center;margin-bottom:13px;
+    border-radius:26px;padding:16px 16px 16px;text-align:center;margin-bottom:13px;
     background:linear-gradient(160deg,#151D2A,#243349 60%,#2B2350);color:#fff;
     box-shadow:0 20px 44px rgba(20,28,40,.26);position:relative;overflow:hidden;
   }
@@ -406,15 +468,16 @@
   .fan-hero.on::before{background:radial-gradient(circle,rgba(18,166,110,.38),transparent 68%);animation:breathe 3.4s ease-in-out infinite}
   @keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.12)}}
   .fan-hero .inner{position:relative;z-index:1}
-  .blades{width:112px;height:112px;margin:2px auto 12px;position:relative;display:grid;place-items:center}
-  .blades svg{width:104px;height:104px;color:rgba(255,255,255,.16);transition:.4s}
+  .blades{width:96px;height:96px;margin:0 auto 8px;position:relative;display:grid;place-items:center}
+  .blades svg{width:92px;height:92px;color:rgba(255,255,255,.16);transition:.4s}
   .fan-hero.on .blades svg{color:rgba(255,255,255,.3);animation:spinfan linear infinite;animation-duration:var(--spin,2.4s)}
   @keyframes spinfan{to{transform:rotate(360deg)}}
-  .blades .hub{position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 0 22px rgba(255,255,255,.7)}
+  .blades .hub{position:absolute;width:15px;height:15px;border-radius:50%;background:#fff;box-shadow:0 0 22px rgba(255,255,255,.7)}
+  .blades::after{content:'';position:absolute;width:96px;height:96px;border-radius:50%;border:1px solid rgba(255,255,255,.10)}
   .fan-state{font-size:12px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.62)}
-  .fan-rpm{font-size:40px;font-weight:850;letter-spacing:-.04em;line-height:1.05;margin-top:2px;font-variant-numeric:tabular-nums}
+  .fan-rpm{font-size:37px;font-weight:850;letter-spacing:-.04em;line-height:1.05;margin-top:2px;font-variant-numeric:tabular-nums}
   .fan-rpm small{font-size:14px;font-weight:700;letter-spacing:0;opacity:.6;margin-left:4px}
-  .speeds{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:16px}
+  .speeds{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:14px}
   .speeds button{
     border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.07);color:rgba(255,255,255,.72);
     border-radius:12px;padding:9px 2px 8px;cursor:pointer;transition:.16s;font-family:inherit;
@@ -496,7 +559,7 @@
 
   /* ============ toasts ============ */
   #toasts{
-    position:absolute;left:0;right:0;bottom:86px;z-index:60;display:flex;flex-direction:column;
+    position:absolute;left:0;right:0;bottom:84px;z-index:60;display:flex;flex-direction:column;
     align-items:center;gap:8px;padding:0 16px;pointer-events:none;
   }
   .toast{
@@ -507,7 +570,7 @@
   .toast.good{background:rgba(12,107,72,.96)}
   .toast.bad{background:rgba(180,50,50,.96)}
   .toast.warn{background:rgba(150,98,20,.96)}
-  @keyframes tin{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+  @keyframes tin{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
 
   .net .sig .sigbars i{background:#E2DCCE}
   .net .sig .sigbars i.on{background:currentColor}
@@ -522,8 +585,67 @@
   }
   .sheet.show{transform:none}
   .grab{width:40px;height:5px;border-radius:99px;background:#DCD5C6;margin:2px auto 14px}
-  .sheet h3{font-size:20px;font-weight:850;letter-spacing:-.025em;margin-bottom:5px}
+  .sheet h3{font-size:20px;font-weight:850;letter-spacing:-.025em;margin-bottom:5px;padding-right:44px}
+  .sheet .close{
+    position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);
+    background:#fff;display:grid;place-items:center;cursor:pointer;color:var(--ink2);box-shadow:0 2px 8px rgba(20,28,40,.06);
+  }
+  .sheet .close:active{transform:scale(.95)}
+  .sheet .nets{max-height:none;overflow:visible}
+  .sheet .nets{max-height:none}
   .sheet .sub{font-size:13.5px;color:var(--ink2);line-height:1.5;margin-bottom:14px}
+
+  @media (max-width:340px){
+    .apcard b{font-size:15px}
+    .apcard .copy{padding:7px 9px;font-size:11px}
+    .step .sub{font-size:13px;line-height:1.5}
+    .howto li{padding:7px 10px}
+    .detect b{font-size:13px}
+  }
+  @media (max-width:380px){
+    .brand .bt span{display:none}
+    .step h2{font-size:22px}
+    .apcard{padding:14px;gap:11px}
+    .apcard b{font-size:16.5px}
+    .apcard .wifi-ico{width:36px;height:36px;border-radius:11px}
+    .apcard .copy{padding:8px 10px;font-size:11.5px;border-radius:9px}
+    .howto li{font-size:12.4px;padding:8px 11px}
+    .detect{padding:11px}
+    .detect b{font-size:13.5px}
+    .detect p{font-size:11.8px}
+    .btn.xl{padding:16px 18px;font-size:15.5px}
+    .tabbar{padding:6px 8px calc(8px + env(safe-area-inset-bottom))}
+  }
+  @media (max-height:700px){
+    .hero{padding:4px 4px 10px}
+    .hero h1{font-size:31px}
+    .hero-steps{margin:12px 0 2px}
+    .hero p{font-size:14px}
+    .step .sub{margin-bottom:11px}
+    .joinviz{padding:2px 0 12px}
+  }
+
+  @media (max-width:340px){
+    .apcard .sub2{white-space:nowrap;font-size:10.5px}
+    .howto li{font-size:11.9px;line-height:1.38;padding:6px 9px}
+    .howto li .n{width:17px;height:17px;font-size:10px}
+    .detect .meta{font-size:10.5px}
+  }
+  @media (max-height:720px){
+    .step .kicker{margin-bottom:3px}
+    .step h2{font-size:21px;margin-bottom:4px}
+    .step .sub{font-size:12.6px;line-height:1.45;margin-bottom:9px}
+    .apcard{padding:12px;gap:10px}
+    .apcard .sub2{font-size:11px}
+    .howto li{padding:7px 10px;font-size:12.2px}
+    .detect{padding:10px}
+    .detect p{font-size:11.6px}
+    .stepcta{padding-top:9px}
+    .field{margin-top:10px}
+    .field label{font-size:12px}
+    .input{height:46px}
+    .btn.xl{padding:15px 18px}
+  }
 
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
@@ -584,18 +706,18 @@
         </div>
 
         <div class="hero-steps">
-          <div class="hs"><i>1</i><b>Join its hotspot</b><span>takes 10 s</span></div>
-          <div class="hs"><i>2</i><b>Pick your Wi-Fi</b><span>type once</span></div>
-          <div class="hs"><i>3</i><b>Control your fan</b><span>done</span></div>
+          <div class="hs"><i>1</i><b>Join hotspot</b><span>takes 10 s</span></div>
+          <div class="hs"><i>2</i><b>Pick Wi-Fi</b><span>type once</span></div>
+          <div class="hs"><i>3</i><b>Control fan</b><span>done</span></div>
         </div>
 
-        <div style="height:16px"></div>
+        <div style="height:14px"></div>
         <button class="btn primary xl" id="startSetup">
           Start setup
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
         </button>
 
-        <div style="height:14px"></div>
+        <div style="height:12px"></div>
 
         <button class="saved" id="savedCard" hidden>
           <span class="badge">
@@ -607,9 +729,11 @@
           </span>
         </button>
 
-        <div class="card">
+        <button class="linkbtn" id="otherAddress" hidden>Use a different address</button>
+
+        <div class="card" id="manualCard">
           <h2>Already set up?</h2>
-          <p class="lead">Enter the address your fan got on your home network. It was shown at the end of setup (your router's app can also list it).</p>
+          <p class="lead">Shown at the end of setup — or in your router's app.</p>
           <div class="field">
             <label for="homeIp">Fan address</label>
             <div class="joinrow">
@@ -618,20 +742,20 @@
             </div>
             <p class="hint">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
-              <span><b>airorhythm.local</b> also works on Android and laptops on the same Wi-Fi (not on iPhones).</span>
+              <span><b>airorhythm.local</b> works too — Android and laptops, not iPhone.</span>
             </p>
           </div>
         </div>
 
         <div class="demo-card" id="demoCard" hidden>
           <span class="ico">
-            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4l11 8-11 8V4z"/></svg>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4l11 8-11 8V4z"/></svg>
           </span>
-          <div>
-            <h3>No fan handy? Try the demo</h3>
-            <p>A simulated ESP32 you can set up right here. Nothing is installed and nothing leaves your browser.</p>
-            <button class="btn soft sm" id="startDemo">Open the demo</button>
+          <div class="dtxt">
+            <h3>No fan handy?</h3>
+            <p>A simulated fan — nothing installed.</p>
           </div>
+          <button class="btn soft sm" id="startDemo">Try it</button>
         </div>
 
         <p class="fineprint" id="httpsNote" hidden style="font-size:12px;color:var(--ink3);line-height:1.5;text-align:center;padding:6px 4px 0"></p>
@@ -648,10 +772,10 @@
         </div>
 
         <!-- ---- STEP 1 ---- -->
-        <section class="step active" data-step="1">
+        <section class="step active" id="step1" data-step="1">
           <p class="kicker">Step 1 of 3</p>
           <h2>Join the fan's own Wi-Fi</h2>
-          <p class="sub">Plug in the fan. It creates a small network of its own — that's how we hand over your home Wi-Fi details.</p>
+          <p class="sub">Plug in the fan. It makes its own network for a minute.</p>
 
           <div class="apcard">
             <span class="wifi-ico">
@@ -662,33 +786,38 @@
               <b id="apSsid">AiroRhythm-Setup</b>
               <span class="sub2" id="apPassLine">Open network · no password</span>
             </span>
-            <button class="copy" id="copySsid">Copy</button>
+            <button class="copy" id="copySsid" aria-label="Copy the network name">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M15 5.5A2.5 2.5 0 0 0 12.5 3h-7A2.5 2.5 0 0 0 3 5.5v7A2.5 2.5 0 0 0 5.5 15"/></svg>
+              <span>Copy</span>
+            </button>
+          </div>
+
+          <div class="detect" id="detectBox" data-state="searching" aria-live="polite">
+            <span class="dicon" id="detectIcon"></span>
+            <div class="dtxt">
+              <b id="detectTitle">Looking for your fan…</b>
+              <p id="detectText">Make sure this phone is on the fan's setup network.</p>
+              <span class="meta" id="detectMeta" hidden></span>
+            </div>
+            <button class="mini" id="detectRetry" hidden>Retry</button>
+            <button class="mini demo" id="detectDemo" hidden>Demo</button>
           </div>
 
           <ol class="howto">
             <li><span class="n">1</span><span>Open <b>Settings → Wi-Fi</b> on this phone.</span></li>
             <li><span class="n">2</span><span>Tap <b id="apSsid2">AiroRhythm-Setup</b>.</span></li>
-            <li><span class="n">3</span><span>Come back here — it may say <b>“No internet”</b>. That's expected; stay connected.</span></li>
+            <li><span class="n">3</span><span>Come back here. If it says <b>“No internet”</b>, stay connected — that's expected.</span></li>
           </ol>
 
-          <div class="detect" id="detectBox" data-state="searching" aria-live="polite">
-            <div class="radar"><i></i><i></i><i></i><span class="core" id="detectIcon"></span></div>
-            <b id="detectTitle">Looking for your fan…</b>
-            <p id="detectText">Checking the setup address 192.168.4.1</p>
-            <div class="acts">
-              <button class="btn ghost sm" id="detectRetry" hidden>Check again</button>
-              <button class="btn soft sm" id="detectDemo" hidden>Try the demo instead</button>
-            </div>
-            <span class="meta" id="detectMeta" hidden></span>
-          </div>
 
-          <button class="btn primary xl" id="step1Next" disabled>Continue</button>
+          <div class="stepcta">
+            <button class="btn primary xl" id="step1Next" disabled>Continue</button>
+          </div>
           <p class="hint" style="justify-content:center;text-align:center;margin-top:10px" id="step1Hint">
             <span>This button lights up as soon as the fan answers.</span>
           </p>
 
-          <div style="height:10px"></div>
-          <button class="btn ghost" id="step1Trouble">Nothing shows up?</button>
+          <button class="linkbtn" id="step1Trouble">Nothing shows up?</button>
           <div id="step1Tips" hidden style="margin-top:12px">
             <div class="note warn">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 3l9.5 17H2.5L12 3z"/><path d="M12 9.5v4.5M12 17h.01"/></svg>
@@ -705,10 +834,10 @@
         </section>
 
         <!-- ---- STEP 2 ---- -->
-        <section class="step" data-step="2">
+        <section class="step" id="step2" data-step="2">
           <p class="kicker">Step 2 of 3</p>
-          <h2>Which Wi-Fi should the fan join?</h2>
-          <p class="sub">Pick the network your phone normally uses. The fan works on <b>2.4 GHz</b> — most routers show that as the name without “5G” in it.</p>
+          <h2>Pick your home Wi-Fi</h2>
+          <p class="sub">Pick your phone's network. The fan needs the <b>2.4 GHz</b> one.</p>
 
           <div class="list-head">
             <b>Networks in range</b>
@@ -718,11 +847,13 @@
             </button>
           </div>
           <div class="nets" id="netList"></div>
-
-          <button class="manual-toggle" id="manualToggle">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-            Type the name instead
-          </button>
+          <div class="listfoot">
+            <span id="netFoot" hidden></span>
+            <button class="manual-toggle" id="manualToggle">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+              <span id="manualToggleTxt">Type the name instead</span>
+            </button>
+          </div>
           <div class="field" id="manualField" hidden>
             <label for="manualSsid">Network name (SSID)</label>
             <input class="input" id="manualSsid" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Home_WiFi">
@@ -739,7 +870,7 @@
             <p class="err" id="passErr">Wi-Fi passwords are at least 8 characters. Check for a typo.</p>
             <p class="hint">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="9.5" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg>
-              <span>Sent straight to the fan and stored on it. We don't upload it anywhere.</span>
+              <span>Stored on the fan only — never uploaded.</span>
             </p>
           </div>
 
@@ -748,11 +879,9 @@
             <span><b>This name looks like a 5 GHz network.</b> The fan can't join 5 GHz. If it fails, choose the 2.4 GHz name (often the same name without “5G”).</span>
           </div>
 
-          <div style="height:8px"></div>
-          <button class="btn primary xl" id="step2Next" disabled>Connect my fan</button>
-          <p class="hint" style="justify-content:center;text-align:center;margin-top:10px">
-            <span>The fan restarts its Wi-Fi for a few seconds while it joins.</span>
-          </p>
+          <div class="stepcta">
+            <button class="btn primary xl" id="step2Next" disabled>Connect my fan</button>
+          </div>
         </section>
 
         <!-- ---- STEP 3 ---- -->
@@ -761,6 +890,13 @@
           <h2 id="progressTitle">Sending your Wi-Fi to the fan</h2>
           <p class="sub" id="progressSub">Keep this page open. This usually takes 10–20 seconds.</p>
 
+          <div class="joinviz searching" id="joinViz" aria-hidden="true">
+            <span class="ring"></span><span class="ring"></span>
+            <span class="disc" id="joinVizIcon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5a13 13 0 0 1 16 0"/><path d="M7 13a9 9 0 0 1 10 0"/><path d="M10 16.5a4.5 4.5 0 0 1 4 0"/><circle cx="12" cy="20" r="1.1" fill="currentColor" stroke="none"/></svg>
+            </span>
+          </div>
+
           <ul class="plist" id="plist" aria-live="polite">
             <li data-row="saved" data-state="wait"><span class="st"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span><span>Details sent to the fan</span><span class="aside"></span></li>
             <li data-row="joining" data-state="wait"><span class="st"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span><span id="joiningLabel">Joining your Wi-Fi</span><span class="aside"></span></li>
@@ -768,7 +904,20 @@
           </ul>
 
           <div id="progressFoot">
-            <div class="note">
+            <div class="card tips" id="joinTips">
+              <h3>While it joins</h3>
+              <ul class="tiplist">
+                <li>
+                  <span class="ti"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.4.9 1 .9 1.7V17h5.2v-1.4c0-.7.3-1.3.9-1.7A6 6 0 0 0 12 3z"/></svg></span>
+                  The fan's LED blinks fast, then stays solid when it is online.
+                </li>
+                <li>
+                  <span class="ti"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5a13 13 0 0 1 16 0"/><path d="M7 13a9 9 0 0 1 10 0"/><path d="M10 16.5a4.5 4.5 0 0 1 4 0"/><circle cx="12" cy="20" r="1.1" fill="currentColor" stroke="none"/></svg></span>
+                  Stay within a few metres of the router for this first connection.
+                </li>
+              </ul>
+            </div>
+            <div class="note" style="margin-top:0">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
               <span>Don't close the page or leave Wi-Fi settings until this finishes.</span>
             </div>
@@ -789,10 +938,12 @@
                 </button>
               </div>
             </div>
-            <button class="btn primary xl" id="openControls">Open fan controls</button>
+            <div class="stepcta">
+              <button class="btn primary xl" id="openControls">Open fan controls</button>
+            </div>
             <div style="height:9px"></div>
             <div class="btn-row">
-              <button class="btn ghost" id="setupAnother">Set up another</button>
+              <button class="btn ghost" id="setupAnother">Another fan</button>
               <button class="btn ghost" data-go="home">Done</button>
             </div>
           </div>
@@ -804,11 +955,16 @@
               </div>
               <h3 id="failTitle">The fan couldn't join</h3>
               <p id="failText">Double-check the password and try again.</p>
-              <ul id="failTips"></ul>
             </div>
-            <button class="btn primary xl" id="failRetry">Try again</button>
-            <div style="height:9px"></div>
-            <button class="btn ghost" id="failBack">Choose another network</button>
+            <div class="stepcta">
+              <button class="btn primary xl" id="failRetry">Try again</button>
+              <div style="height:9px"></div>
+              <button class="btn ghost" id="failBack">Choose another network</button>
+            </div>
+            <div class="card tips" style="margin-top:13px">
+              <h3>What to check</h3>
+              <ul class="tiplist checks" id="failTips"></ul>
+            </div>
           </div>
         </section>
       </section>
@@ -846,7 +1002,16 @@
           <div class="fan-hero" id="fanHero">
             <div class="inner">
               <div class="blades" id="blades">
-                <svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 46c-2-14 2-26 6-30 4-4 9-1 8 6-1 8-7 17-14 24z"/><path d="M54 50c14-2 26 2 30 6 4 4 1 9-6 8-8-1-17-7-24-14z" /><path d="M50 54c2 14-2 26-6 30-4 4-9 1-8-6 1-8 7-17 14-24z"/><path d="M46 50c-14 2-26-2-30-6-4-4-1-9 6-8 8 1 17 7 24 14z"/></svg>
+                <svg viewBox="0 0 100 100" fill="currentColor">
+                  <defs>
+                    <path id="blade" d="M50 47.5c3.6-7.4 9.6-14.4 16.2-18.4 5.4-3.2 9.4-.6 7.1 5-2.7 6.6-9.8 12.4-18.4 15.1-1.9.6-3.6 0-4.9-1.7z"/>
+                  </defs>
+                  <use href="#blade"/>
+                  <use href="#blade" transform="rotate(72 50 50)"/>
+                  <use href="#blade" transform="rotate(144 50 50)"/>
+                  <use href="#blade" transform="rotate(216 50 50)"/>
+                  <use href="#blade" transform="rotate(288 50 50)"/>
+                </svg>
                 <span class="hub"></span>
               </div>
               <span class="fan-state" id="fanStateLab">Fan off</span>
@@ -869,11 +1034,6 @@
 
           <div class="tiles">
             <div class="tile">
-              <span class="lab"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 12h4l2-5 3 10 2.5-6 1.5 1H20"/></svg>Speed</span>
-              <div class="val" id="tileRpm">0<small>rpm</small></div>
-              <div class="sub" id="tileRpmSub">idle</div>
-            </div>
-            <div class="tile">
               <span class="lab"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2.5L5 13.5h6l-1 8 8-11h-6l1-8z"/></svg>Power</span>
               <div class="val" id="tileWatts">0<small>W</small></div>
               <div class="sub" id="tileWattsSub">0.00 A</div>
@@ -881,15 +1041,15 @@
             <div class="tile">
               <span class="lab"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13.5V5.5a2 2 0 1 1 4 0v8a4.2 4.2 0 1 1-4 0z"/></svg>Temperature</span>
               <div class="val" id="tileTemp">—</div>
-              <div class="sub" id="tileTempSub">sensor</div>
+              <div class="sub" id="tileTempSub">no sensor</div>
             </div>
             <div class="tile">
               <span class="lab"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5s6 6.4 6 10.2a6 6 0 0 1-12 0C6 9.9 12 3.5 12 3.5z"/></svg>Humidity</span>
               <div class="val" id="tileRh">—</div>
-              <div class="sub" id="tileRhSub">sensor</div>
+              <div class="sub" id="tileRhSub">no sensor</div>
             </div>
-            <div class="tile" style="grid-column:span 2">
-              <span class="lab"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h11a3 3 0 1 0-3-3"/><path d="M3 13h14a3 3 0 1 1-3 3"/><path d="M3 18h7"/></svg>Air (smoke sensor)</span>
+            <div class="tile">
+              <span class="lab"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h11a3 3 0 1 0-3-3"/><path d="M3 13h14a3 3 0 1 1-3 3"/><path d="M3 18h7"/></svg>Air quality</span>
               <div class="val" id="tileSmoke">—</div>
               <div class="sub" id="tileSmokeSub">all clear</div>
             </div>
@@ -1029,6 +1189,9 @@
     <div class="scrim" id="scrim"></div>
     <div class="sheet" id="wifiSheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
       <div class="grab"></div>
+      <button class="close" id="sheetClose" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
       <h3 id="sheetTitle">Change Wi-Fi</h3>
       <p class="sub">Pick another network for the fan. It keeps the old one until the new one works.</p>
       <div class="list-head">
@@ -1262,6 +1425,15 @@
 
   const views = ['home', 'wizard', 'fan', 'help'];
 
+  function resetScroll() {
+    const views = $('#views');
+    if (document.activeElement && typeof document.activeElement.blur === 'function') {
+      document.activeElement.blur();
+    }
+    views.scrollTop = 0;
+    if (window.requestAnimationFrame) requestAnimationFrame(() => (views.scrollTop = 0));
+  }
+
   function go(view, opts = {}) {
     if (!views.includes(view)) view = 'home';
     state.view = view;
@@ -1270,7 +1442,7 @@
       if (el) el.classList.toggle('active', v === view);
     });
     $$('.tab').forEach((tab) => tab.classList.toggle('active', tab.dataset.go === view));
-    if (!opts.keepScroll) $('#views').scrollTop = 0;
+    if (!opts.keepScroll) resetScroll();
     if (view === 'wizard' && !state.applying) startDetect();
     if (view !== 'wizard') stopDetect();
   }
@@ -1309,23 +1481,26 @@
     if (demoBtn) demoBtn.hidden = true;
 
     if (kind === 'searching') {
-      icon.innerHTML = ICON.wifi;
+      icon.innerHTML =
+        '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5a13 13 0 0 1 16 0"/><path d="M7 13a9 9 0 0 1 10 0"/><path d="M10 16.5a4.5 4.5 0 0 1 4 0"/><circle cx="12" cy="20" r="1.1" fill="currentColor" stroke="none"/></svg>';
       title.textContent = 'Looking for your fan…';
       text.textContent = 'Make sure this phone is connected to the fan’s setup network.';
       next.disabled = !state.allowSkip;
+      $('#step1Hint').hidden = false;
       $('#step1Hint').lastElementChild.textContent = 'This button lights up as soon as the fan answers.';
     } else if (kind === 'found') {
-      icon.innerHTML = ICON.check;
+      icon.innerHTML =
+        '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>';
       title.textContent = 'Fan found!';
       text.textContent = 'You are on the fan’s network. Ready for the next step.';
       meta.hidden = false;
       meta.textContent = (state.ap && state.ap.device ? state.ap.device : 'AiroRhythm Fan') + ' · fw ' + ((state.ap && state.ap.fw) || '—');
       next.disabled = false;
-      $('#step1Hint').lastElementChild.textContent = 'Nice — tap Continue.';
+      $('#step1Hint').hidden = true;
       stopDetect();
     } else if (kind === 'fail') {
       icon.innerHTML =
-        '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9.5 17H2.5L12 3z"/><path d="M12 9.5v4.5M12 17h.01"/></svg>';
+        '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9.5 17H2.5L12 3z"/><path d="M12 9.5v4.5M12 17h.01"/></svg>';
       title.textContent = 'Not seeing the fan yet';
       text.textContent = 'Check the phone is on AiroRhythm-Setup, then try again.';
       retry.hidden = false;
@@ -1334,7 +1509,8 @@
       $('#step1Hint').lastElementChild.textContent = 'Still nothing? Read “Nothing shows up?” below.';
       showTips();
     } else if (kind === 'idle') {
-      icon.innerHTML = ICON.wifi;
+      icon.innerHTML =
+        '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5a13 13 0 0 1 16 0"/><path d="M7 13a9 9 0 0 1 10 0"/><path d="M10 16.5a4.5 4.5 0 0 1 4 0"/><circle cx="12" cy="20" r="1.1" fill="currentColor" stroke="none"/></svg>';
       title.textContent = 'Looking for your fan…';
       text.textContent = 'Checking the setup address 192.168.4.1';
       next.disabled = true;
@@ -1397,7 +1573,7 @@
     $$('.dots i').forEach((dot) => {
       dot.classList.toggle('on', Number(dot.dataset.dot) <= step);
     });
-    $('#views').scrollTop = 0;
+    resetScroll();
     if (step === 1) {
       state.detectStarted = Date.now();
       startDetect();
@@ -1428,6 +1604,9 @@
     $('#progressSub').textContent = 'Keep this page open. This usually takes 10–20 seconds.';
     state.result = null;
     state.settleGuard = false;
+    setJoinViz('searching');
+    $('#plist').classList.remove('done');
+    if ($('#joinTips')) $('#joinTips').hidden = false;
     row('saved', 'wait');
     row('joining', 'wait');
     row('address', 'wait');
@@ -1514,6 +1693,11 @@
         if (match && !state.picked) state.picked = match;
       }
       renderNetworks();
+      const foot = $('#netFoot');
+      if (foot) {
+        foot.hidden = state.networks.length <= 3;
+        foot.textContent = state.networks.length > 3 ? state.networks.length + ' networks · scroll for more' : '';
+      }
     } catch (err) {
       state.networks = [];
       list.innerHTML =
@@ -1570,7 +1754,10 @@
 
   $('#manualToggle').addEventListener('click', () => {
     const field = $('#manualField');
+    const label = $('#manualToggleTxt');
+    if (label) label.textContent = field.hidden ? 'Pick from the list' : 'Type the name instead';
     field.hidden = !field.hidden;
+    $('#step2').classList.toggle('manual', !field.hidden);
     if (!field.hidden) {
       $('#manualSsid').focus();
       state.manual = true;
@@ -1641,6 +1828,24 @@
 
   /* ============================== step 3 =============================== */
 
+  function setJoinViz(kind) {
+    const viz = $('#joinViz');
+    if (!viz) return;
+    viz.className = 'joinviz ' + kind;
+    const icon = $('#joinVizIcon');
+    if (!icon) return;
+    if (kind === 'done') {
+      icon.innerHTML =
+        '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>';
+    } else if (kind === 'failed') {
+      icon.innerHTML =
+        '<svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9.5 17H2.5L12 3z"/><path d="M12 9.5v4.5M12 17h.01"/></svg>';
+    } else {
+      icon.innerHTML =
+        '<svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5a13 13 0 0 1 16 0"/><path d="M7 13a9 9 0 0 1 10 0"/><path d="M10 16.5a4.5 4.5 0 0 1 4 0"/><circle cx="12" cy="20" r="1.1" fill="currentColor" stroke="none"/></svg>';
+    }
+  }
+
   function row(name, st, aside) {
     const li = $('#plist li[data-row="' + name + '"]');
     if (!li) return;
@@ -1708,6 +1913,9 @@
     row('address', 'done', '');
     state.lanHost = ip !== '—' ? ip : state.lanHost;
     state.result = { ok: true, ip, ssid };
+    setJoinViz('done');
+    $('#plist').classList.add('done');
+    if ($('#joinTips')) $('#joinTips').hidden = true;
 
     if (ip && ip !== '—') {
       saveDevice({ ip, ssid, name: (data && data.device) || 'AiroRhythm Fan', demo: state.demo });
@@ -1728,8 +1936,7 @@
         'It joined ' + ssid + '. Your phone was on the fan’s setup network — reconnect it to your home Wi-Fi to control the fan.';
     }
     $('#successIp').textContent = ip;
-    $('#views').scrollTop = 0;
-    toast('Fan connected', 'good');
+    resetScroll();
   }
 
   function failApply(reason, ssid, detail) {
@@ -1743,11 +1950,15 @@
     $('#progressSub').textContent = 'Nothing is broken — let’s fix it together.';
     $('#views').scrollTop = 0;
 
+    setJoinViz('failed');
+    $('#plist').classList.remove('done');
+    if ($('#joinTips')) $('#joinTips').hidden = true;
     const info = reasonInfo(reason, ssid, detail);
     $('#failTitle').textContent = info.title;
     $('#failText').textContent = info.text;
     $('#failTips').innerHTML = info.tips.map((t) => '<li>' + esc(t) + '</li>').join('');
     state.result = { ok: false, reason };
+    resetScroll();
   }
 
   function reasonInfo(reason, ssid, detail) {
@@ -1846,11 +2057,18 @@
 
   function renderSaved() {
     const card = $('#savedCard');
+    const manual = $('#manualCard');
+    const other = $('#otherAddress');
     if (!state.saved || !state.saved.ip) {
       card.hidden = true;
+      if (other) other.hidden = true;
+      if (manual) manual.hidden = false;
       return;
     }
     card.hidden = false;
+    // the saved card is the shortcut; hide the duplicate address card until asked for
+    if (manual) manual.hidden = true;
+    if (other) other.hidden = false;
     $('#savedName').textContent = state.saved.name || 'AiroRhythm Fan';
     $('#savedMeta').textContent = state.saved.ip + (state.saved.ssid ? ' · ' + state.saved.ssid : '');
     if (!$('#homeIp').value) $('#homeIp').value = state.saved.ip;
@@ -1859,6 +2077,16 @@
   $('#savedCard').addEventListener('click', () =>
     openFanView({ host: state.saved && state.saved.ip, demo: state.saved && state.saved.demo })
   );
+
+  const otherBtn = $('#otherAddress');
+  if (otherBtn) {
+    otherBtn.addEventListener('click', () => {
+      otherBtn.hidden = true;
+      const manual = $('#manualCard');
+      if (manual) manual.hidden = false;
+      $('#homeIp').focus();
+    });
+  }
 
   $('#homeConnect').addEventListener('click', async () => {
     const host = normalizeHost($('#homeIp').value);
@@ -2104,19 +2332,43 @@
       b.classList.toggle('sel', Number(b.dataset.speed) === Number(t.speed || 0) && on);
     });
 
-    $('#tileRpm').innerHTML = rpm + '<small>rpm</small>';
-    $('#tileRpmSub').textContent = on
-      ? (t.rpmEst ? 'estimated · speed ' : 'speed ') + (t.speed || 0) + ' of 4'
-      : 'idle';
-
     const watts = typeof t.watts === 'number' ? t.watts : (t.amps || 0) * 230;
     $('#tileWatts').innerHTML = (watts ? watts.toFixed(1) : '0') + '<small>W</small>';
     $('#tileWattsSub').textContent = (t.amps != null ? Number(t.amps).toFixed(3) : '0.000') + ' A';
 
-    $('#tileTemp').innerHTML = t.temp != null ? Number(t.temp).toFixed(1) + '<small>°C</small>' : '—';
-    $('#tileTempSub').textContent = t.temp != null ? 'DHT22' : 'no sensor';
-    $('#tileRh').innerHTML = t.rh != null ? Math.round(t.rh) + '<small>%</small>' : '—';
-    $('#tileRhSub').textContent = t.rh != null ? 'DHT22' : 'no sensor';
+    const temp = t.temp;
+    $('#tileTemp').innerHTML = temp != null ? Number(temp).toFixed(1) + '<small>°C</small>' : '—';
+    const tempSub = $('#tileTempSub');
+    if (temp == null) {
+      tempSub.textContent = 'no sensor';
+      tempSub.className = 'sub';
+    } else if (temp > 30) {
+      tempSub.textContent = 'warm';
+      tempSub.className = 'sub warn';
+    } else if (temp < 22) {
+      tempSub.textContent = 'cool';
+      tempSub.className = 'sub';
+    } else {
+      tempSub.textContent = 'comfortable';
+      tempSub.className = 'sub ok';
+    }
+
+    const rh = t.rh;
+    $('#tileRh').innerHTML = rh != null ? Math.round(rh) + '<small>%</small>' : '—';
+    const rhSub = $('#tileRhSub');
+    if (rh == null) {
+      rhSub.textContent = 'no sensor';
+      rhSub.className = 'sub';
+    } else if (rh < 40) {
+      rhSub.textContent = 'dry';
+      rhSub.className = 'sub warn';
+    } else if (rh > 65) {
+      rhSub.textContent = 'humid';
+      rhSub.className = 'sub warn';
+    } else {
+      rhSub.textContent = 'comfortable';
+      rhSub.className = 'sub ok';
+    }
 
     const smoke = t.smoke;
     const smokeVal = $('#tileSmoke');
@@ -2224,6 +2476,9 @@
     if (!state.sheetBusy) closeSheet();
   });
   $('#sheetCancel').addEventListener('click', () => {
+    if (!state.sheetBusy) closeSheet();
+  });
+  $('#sheetClose').addEventListener('click', () => {
     if (!state.sheetBusy) closeSheet();
   });
 
