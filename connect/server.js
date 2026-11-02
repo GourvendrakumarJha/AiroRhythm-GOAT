@@ -45,6 +45,7 @@ const MIME = {
   '.ico': 'image/x-icon',
   '.webmanifest': 'application/manifest+json',
   '.woff2': 'font/woff2',
+  '.apk': 'application/vnd.android.package-archive',
 };
 
 const sim = createSimHandler({ prefix: '/sim' });
@@ -120,11 +121,13 @@ function sizeLabel(n) {
 function downloadPage() {
   let dirs = [];
   let zips = [];
+  let apks = [];
   let entries = [];
   try {
     entries = fs.readdirSync(RELEASES, { withFileTypes: true });
     dirs = entries.filter((e) => e.isDirectory()).map((e) => e.name).sort().reverse();
     zips = entries.filter((e) => e.isFile() && e.name.endsWith('.zip')).map((e) => e.name).sort().reverse();
+    apks = entries.filter((e) => e.isFile() && e.name.endsWith('.apk')).map((e) => e.name).sort().reverse();
   } catch (_) {
     return '<!doctype html><meta charset="utf-8"><body style="font:16px system-ui;padding:40px;color:#334">'
       + '<h1>No release yet</h1><p>Run <code>cd connect &amp;&amp; npm run release</code> and reload this page.</p></body>';
@@ -134,7 +137,16 @@ function downloadPage() {
     .map((zip) => `<section><h2>${zip}</h2>
       <p class="zip"><a href="/downloads/${zip}" download>Download ${zip}</a>
       <span class="s">${sizeLabel(fs.statSync(path.join(RELEASES, zip)).size)} · everything in one file</span></p>
-      <p class="s" style="text-align:left">Unzip it and open <code>README.md</code>, or run <code>node server.js</code> inside it.</p>
+      <p class="h">Unzip it and open <code>README.md</code>, or run <code>node server.js</code> inside it.</p>
+    </section>`)
+    .join('');
+
+  const apkCards = apks
+    .map((apk) => `<section><h2>Android app</h2>
+      <p class="zip"><a href="/downloads/${apk}" download>Download ${apk}</a>
+      <span class="s">${sizeLabel(fs.statSync(path.join(RELEASES, apk)).size)} · install on the phone</span></p>
+      <p class="h">Open it on the phone, allow "install unknown apps" once, then
+      launch <b>AiroRhythm Connect</b>. Same app as the web page — it just talks to the fan without a browser.</p>
     </section>`)
     .join('');
 
@@ -185,6 +197,8 @@ function downloadPage() {
   tr:first-child td{border-top:0}
   td i{color:var(--ink3);font-style:normal;font-weight:500}
   td.s,.s{color:var(--ink3);font-size:12.5px;text-align:right;white-space:nowrap;font-weight:500}
+  .h{color:var(--ink3);font-size:12.5px;line-height:1.5;margin:8px 0 0}
+  .h b{color:var(--ink2)}
   .zip{margin:0 0 12px;padding:12px 14px;border-radius:12px;background:#eef3ff;border:1px solid #d8e4ff}
   .zip a{font-size:15.5px}
   .zip .s{display:block;text-align:left;margin-top:2px}
@@ -195,6 +209,7 @@ function downloadPage() {
   <h1>AiroRhythm Connect — files</h1>
   <p class="lead">Grab the zip, or the individual files. <code>index.html</code> plus
      <code>assets/</code> is the whole app; <code>firmware/</code> goes to the board.</p>
+  ${apkCards || ''}
   ${zipCards || ''}
   ${blocks || (zips.length ? '' : '<section><p>No release found. Run <code>npm run release</code>.</p></section>')}
   <footer>Served from <code>release/</code> by the local development server.</footer>
@@ -228,7 +243,7 @@ function serveDownloads(req, res, url) {
       'cache-control': 'no-store',
       'x-content-type-options': 'nosniff',
     };
-    if (ext === '.zip' || ext === '.ino') {
+    if (ext === '.zip' || ext === '.ino' || ext === '.apk') {
       headers['content-disposition'] = `attachment; filename="${path.basename(filePath)}"`;
     }
     res.writeHead(200, headers);

@@ -141,12 +141,20 @@ internet — just the phone and the fan.
 
 ### Get the APK
 
-1. GitHub → **Actions** → **Android APK** → **Run workflow** (or just push a change to
-   `connect/index.html`).
-2. When the run finishes, download the **`airorhythm-connect-apk`** artifact and unzip it —
-   that is `app-debug.apk`.
-3. On the phone: open the file, allow "install unknown apps" for your browser/file manager,
-   install, open **AiroRhythm Connect**.
+Three ways, pick whichever suits you:
+
+| Where | How |
+|---|---|
+| **This repository** | `release/airorhythm-connect-1.0.0.apk` — committed by CI, so a clone has it |
+| **The running server** | open `/downloads/` and tap **Download airorhythm-connect-1.0.0.apk** |
+| **Actions** | **Android APK** → a run → download the `airorhythm-connect-apk` artifact |
+
+Then on the phone: open the file, allow "install unknown apps" once, install, and launch
+**AiroRhythm Connect**.
+
+The workflow builds on every change to the web app and commits a fresh APK whenever the
+commit message contains `[apk]` (or on a manual run), so the file in `release/` never goes
+stale.
 
 The debug APK is signed with the standard debug key, which is fine for sideloading. Replace
 the `signingConfig` in `app/build.gradle` before publishing anywhere.
